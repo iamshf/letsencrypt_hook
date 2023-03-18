@@ -42,14 +42,12 @@ function _ali_add_record() {
     _ali_api_method="POST"
     _ali_add_record_query
 
-    local _result=$(curl -s -X "${_ali_api_method}" "${_ali_api_url}" -d "${_ali_api_params}")
-    #echo ${_result} >> ./add_result
     #local _record_id=$(curl -s -X "${_ali_api_method}" "${_ali_api_url}" -d "${_ali_api_params}" | ./jq -r ".RecordId")
+    local _result=$(curl -s -X "${_ali_api_method}" "${_ali_api_url}" -d "${_ali_api_params}")
     local _record_id=$(echo ${_result} | $(dirname $0)/jq -r ".RecordId")
 
     if [[ -n "${_record_id}" ]] && [[ "${_record_id}" != "null" ]]
     then
-        #echo ${_record_id} >> ./authparam
         printf "%s" ${_record_id}
     fi
     
@@ -83,15 +81,8 @@ function _ali_del_record(){
     _ali_api_method="POST"
     local _line=""
 
-    #for _line in $(cat "./authparam")
-    #do
-    #    if [[ -n "${_ling}" ]]
-    #    then
-            _ali_del_record_query
-            curl -s -X "${_ali_api_method}" "${_ali_api_url}" -d "${_ali_api_params}"
-    #    fi
-    #done
-    #rm ./authparam
+    _ali_del_record_query
+    curl -s -X "${_ali_api_method}" "${_ali_api_url}" -d "${_ali_api_params}" >/dev/null
 }
 function _ali_del_record_query(){
     _ali_api_params=""
